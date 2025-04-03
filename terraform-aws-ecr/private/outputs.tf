@@ -1,10 +1,10 @@
-output "private_ecr_data" {
+output "output_data" {
+  description = "Private ECR repository's details"
   value = {
-    "Private Repo Name(s)"      = aws_ecr_repository.private_repo[*].name
-    "Image Tag Mutability Type" = aws_ecr_repository.private_repo[*].image_tag_mutability
-    "Private Repo Full Arn"     = aws_ecr_repository.private_repo[*].arn
-    "Private Repo URL"          = aws_ecr_repository.private_repo[*].repository_url
-    "Private Repo Registry ID"  = aws_ecr_repository.private_repo[*].registry_id
-    
+    name                   = aws_ecr_repository.private_repo.name
+    arn                    = aws_ecr_repository.private_repo.arn
+    url                    = aws_ecr_repository.private_repo.repository_url
+    registryID             = aws_ecr_repository.private_repo.registry_id
+    imageTagMutabilityType = aws_ecr_repository.private_repo.image_tag_mutability
   }
 }

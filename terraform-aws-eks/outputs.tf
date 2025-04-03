@@ -1,11 +1,6 @@
-output "eks_cluster_data" {
+output "output_data" {
+  description = "EKS Cluster details "
   value = {
-    "EKS Cluster Name" = aws_eks_cluster.eks_cluster.name
+    name = aws_eks_cluster.this.name
   }
 }
-
-# output "eks_cluster_name" {
-#   description = "Name of EKS Cluster"
-#   value = aws_eks_cluster.eks_cluster.name
-# }
-

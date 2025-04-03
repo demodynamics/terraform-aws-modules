@@ -1,9 +1,10 @@
-output "public_ecr_data" {
+output "output_data" {
+  description = "Public ECR Repository's Details"
   value = {
-    "Public Repo ID"           = aws_ecrpublic_repository.public_repo[*].id
-    "Public Repo Name(s)"         = aws_ecrpublic_repository.public_repo[*].repository_name
-    "Public Repo Full Arn"     = aws_ecrpublic_repository.public_repo[*].arn
-    "Public Repo URL"          = aws_ecrpublic_repository.public_repo[*].repository_uri
-    "Public Repo Registry ID"  = aws_ecrpublic_repository.public_repo[*].registry_id
+    name        = aws_ecrpublic_repository.public_repo.repository_name
+    id          = aws_ecrpublic_repository.public_repo.id
+    arn         = aws_ecrpublic_repository.public_repo.arn
+    url         = aws_ecrpublic_repository.public_repo.repository_uri
+    registryID  = aws_ecrpublic_repository.public_repo.registry_id
   }
 }
