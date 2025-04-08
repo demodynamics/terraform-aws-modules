@@ -83,8 +83,6 @@ variable "public_subnets_count" {
   default = 3
 }
 
-
-
 variable "private_subnets_count" {
   description = "Number of private subnets to create"
   type = number

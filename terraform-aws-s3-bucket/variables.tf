@@ -32,7 +32,8 @@ variable "custom_kms_key" {
   default = ""
 
   validation {
-    condition     = can(regex("^arn:aws:kms:[a-z0-9-]+:[0-9]{12}:key/[a-zA-Z0-9-]{1,64}$", var.custom_kms_key))
+    condition     = (var.bucket_encryption != "aws:kms" || 
+                     can(regex("^arn:aws:kms:[a-z0-9-]+:[0-9]{12}:key/[a-zA-Z0-9-]{1,64}$", var.custom_kms_key)))
     error_message = "The custom_kms_key must be a valid KMS Key ARN in the format arn:aws:kms:<region>:<account-id>:key/<key-id>."
   }
   

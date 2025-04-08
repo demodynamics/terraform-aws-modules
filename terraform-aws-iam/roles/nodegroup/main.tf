@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "node_group_role_assume_role_policy" {
 }
 
 resource "aws_iam_role" "eks_node_group_role" {
-  name               = join("-", compact([var.default_tags["Project"], "eks-cluster-nodegroup-role" ]) ) 
+  name               = join("-", compact([var.default_tags["Project"], var.cluster_name, "eks-cluster-nodegroup-role" ]) ) 
   assume_role_policy = data.aws_iam_policy_document.node_group_role_assume_role_policy.json
   tags               = var.default_tags
 

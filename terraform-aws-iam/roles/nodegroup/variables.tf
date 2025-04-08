@@ -1,3 +1,14 @@
+variable "cluster_name" {
+  description = "EKS Cluster Name"
+  type = string
+  default = "main"
+
+  validation {
+    condition = can(regex("^[a-z0-9-]{1,64}*$", var.cluster_name))
+    error_message = "cluster_name must be between 1 and 64 characters, and can only contain lowercase letters, numbers, and hyphens."
+  }
+}
+
 variable "policies" {
   description = "List of AWS managed permissions policy(s) for Node Group Role"
   type = set(string)
