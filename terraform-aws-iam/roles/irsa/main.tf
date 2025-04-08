@@ -11,7 +11,7 @@ data "aws_iam_policy_document" "irsa_assume_role_policy" {
     condition {
       test     = "StringLike" # Ensures the condition must exactly match the provided values.
       variable = "${replace(var.oidc_provider_arn, "/^(.*provider\\/)/", "")}:sub" # Specifies the iss (issuer) claim from the OIDC token (It is the URL of specific Kubernetes cluster OIDC Provider, which (OIDC Provider) issued token, which (token) specific service account of that specific cluster use to assume the role with access permissions)
-      values   = ["system:serviceaccount:${var.namespace}:${var.service_account}"] # Specifies the sub (subject) claim from the OIDC token: It is a specific Kubernetes cluster's specific service account which can assume the role with this trust policy using the identity token isued by OIDC Provider of the cluster wher this service account was created)
+      values   = ["system:serviceaccount:${var.service_account_namespace}:${var.service_account_name}"] # Specifies the sub (subject) claim from the OIDC token: It is a specific Kubernetes cluster's specific service account which can assume the role with this trust policy using the identity token isued by OIDC Provider of the cluster wher this service account was created)
 
     }
 
@@ -25,7 +25,7 @@ data "aws_iam_policy_document" "irsa_assume_role_policy" {
 
 resource "aws_iam_role" "irsa" {
   description        = "IAM Role for Service Accounts"
-  name               = substr("${var.cluster_name}-${var.namespace}-${var.service_account}-role", 0, 64) # IAM role name must be less than 64 characters
+  name               = substr("${var.cluster_name}-${var.service_account_namespace}-${var.service_account_name}-role", 0, 64) # IAM role name must be less than 64 characters
   assume_role_policy = data.aws_iam_policy_document.irsa_assume_role_policy.json 
   tags               = var.default_tags
 
