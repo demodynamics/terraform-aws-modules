@@ -28,5 +28,5 @@ resource "aws_iam_role" "eks_nodegroup_role" {
 resource "aws_iam_role_policy_attachment" "eks_node_group_role_attachment" {
   for_each   = var.policies # for_each automatically skips iteration if var.policies is an empty set and will not create attachement.
   policy_arn = each.value
-  role       = aws_iam_role.eks_node_group_role.name
+  role       = aws_iam_role.eks_nodegroup_role.name
 }
