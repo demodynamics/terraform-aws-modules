@@ -63,7 +63,7 @@ variable "github_branch" {
 variable "self_managed_policy_name" {
   description = "Custom Policy name that we create manually"
   type        = string
-  default     = "EKSAccessPolicy"
+  default     = "eks-access-policy"
 
   validation {
     condition     = length(var.self_managed_policy_name) > 0

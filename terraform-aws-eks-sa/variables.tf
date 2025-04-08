@@ -4,7 +4,7 @@ variable "service_account_name" {
   default     = ""
 
   validation {
-    condition     = can(regex("^[a-z0-9]([-a-z0-9]*[a-z0-9])?$", var.service_account)) && length(var.service_account) <= 253
+    condition     = can(regex("^[a-z0-9]([-a-z0-9]*[a-z0-9])?$", var.service_account_name)) && length(var.service_account_name) <= 253
     error_message = "The service account name must be 1-253 characters long, contain only lowercase letters, numbers, and dashes, and cannot start or end with a dash."
   }
 
@@ -15,7 +15,7 @@ variable "service_account_namespace" {
   default     = ""
   
   validation {
-    condition     = can(regex("^[a-z0-9]([-a-z0-9]*[a-z0-9])?$", var.namespace)) && length(var.namespace) <= 63
+    condition     = can(regex("^[a-z0-9]([-a-z0-9]*[a-z0-9])?$", var.service_account_namespace)) && length(var.service_account_namespace) <= 63
     error_message = "The namespace must be a valid Kubernetes namespace name: 1-63 characters, lowercase letters, numbers, and dashes, but cannot start or end with a dash."
   }
 }
