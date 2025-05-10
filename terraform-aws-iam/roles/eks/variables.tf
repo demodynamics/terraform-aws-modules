@@ -43,24 +43,69 @@ variable "policies" {
 
 /*
 When Both NodeGroup Role and IRSA Have AmazonEC2ContainerRegistryReadOnly Policy:
-  NodeGroup Role: If the node group role has the AmazonEC2ContainerRegistryReadOnly policy, then the nodes will pull images from ECR when the pods are 
-  scheduled on them.
-  IRSA: Even though the pods also have the permission via IRSA, the nodes will pull the image first, since they’re the ones responsible for pulling the image 
-  onto the underlying EC2 instance before the pod can run on it.
-In this case, the nodes handle the pulling because they have the necessary permissions to interact with ECR.
+  When you attach AmazonEC2ContainerRegistryReadOnly to both the:
 
-When NodeGroup Role Doesn't Have AmazonEC2ContainerRegistryReadOnly Policy, But IRSA Does:
-  NodeGroup Role: If you remove the ECR pull permissions from the node group role, then the nodes won’t be able to pull images from ECR.
-  IRSA: Since the pods have the AmazonEC2ContainerRegistryReadOnly permission via IRSA, they will be able to pull images directly from ECR.
-    The pods themselves will perform the image pull, not the nodes. The nodes still provide the infrastructure for running the pods, but pods now handle the 
-    image pulling directly.
+✅ Node group IAM role (for EC2 nodes), and
 
-Summary:
-  If both the node group role and IRSA have the AmazonEC2ContainerRegistryReadOnly policy, nodes pull the images (since they are responsible for pulling 
-  images to run the pods).
-  If node group role doesn’t have the AmazonEC2ContainerRegistryReadOnly policy, pods will directly pull the images via IRSA, even though the nodes cannot.
-This gives you flexibility and fine-grained control over which part of the system (node vs pod) can access ECR.
+✅ IRSA-linked IAM role (for the Kubernetes service account used by your pods),
 
+then:
+
+🔐 IRSA takes priority — but only for pods that use the IRSA-enabled service account.
+So:
+
+          Pod Type	                       Priority IAM Role
+System pods (CoreDNS, kube-proxy)	        Node group IAM role
+Your pod using ecr-access	                IRSA IAM role (via service account) ✅
+Your pod using default SA	                Node group IAM role
+
+🔁 Why This Design Matters
+The node IAM role is always available, which ensures the cluster can start and function.
+The IRSA role is more secure and scoped only to specific pods that need specific permissions.
+
+  NodeGroup Role: If the node group role has the AmazonEC2ContainerRegistryReadOnly policy and pod is NOT using IRSA IAM role (via service account) then 
+  the nodes will pull images from ECR when the pods are scheduled on them using Nodegroup IAM role.
+  
+  IRSA: If the pod is using the IRSA IAM role (via service account) then the pod will pull images from ECR when the pods are scheduled on them using IRSA 
+  IAM role.
+  The nodes will not pull images from ECR in this case, since the pod has the necessary permissions to interact with ECR via IRSA.
+  The nodes will still provide the infrastructure for running the pods, but the pods themselves will perform the image pull.
+
+
+
+❗ But, During Node Group Creation, When a node group launches EC2 instances, those EC2s must:
+  Download containerd, kubelet, and CNI binaries
+  Pull ECR images (for core system pods too!)
+  Communicate with EKS APIs
+
+All of this happens before any pod or IRSA is in use.
+
+So the IAM role (NodeGroup Role) attached to the EC2 node group itself must include:
+  AmazonEKSWorkerNodePolicy
+  AmazonEKS_CNI_Policy
+  ✅ AmazonEC2ContainerRegistryReadOnly
+
+
+  🔹 Node Group IAM Role: Applies to the EC2 instance
+      Grants permissions to the EC2 host (node) itself.
+      Used during bootstrapping, to pull system pods (like CoreDNS, kube-proxy) from ECR.
+      Also used if pods do not use a service account with IRSA
+
+🔹 IRSA (IAM Role for Service Account): Applies to specific pods
+      Overrides the node IAM role only for pods that explicitly use the annotated service account.
+      Is the most granular level of IAM control for Kubernetes workloads.
+      Applies only after the pod is scheduled and running.
+
+                                   ✅ Priority / Precedence
+        Scenario	                             Pod uses IRSA?	       Permission Source
+Core system pod (e.g. CoreDNS)	                   ❌ No	              Node IAM role
+Your pod using default SA	                         ❌ No	              Node IAM role
+Your pod using custom SA with IRSA	               ✅ Yes	            IRSA (Service Account IAM role)
+
+✔️ So:
+Keep AmazonEC2ContainerRegistryReadOnly on the Node IAM Role for bootstrapping and EKS system functionality.
+Also assign it via IRSA if your app pods pull from ECR.
+They don’t conflict — IRSA takes precedence for the pods that use it.
 
 */
 
