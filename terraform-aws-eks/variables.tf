@@ -1,3 +1,15 @@
+variable "cluster_version" {
+  description = "EKS Cluster Version"
+  type        = string
+  default     = "1.33"
+
+  validation {
+    condition     = can(regex("^[0-9]{1,2}.[0-9]{1,2}$", var.cluster_version)) && length(var.cluster_version) <= 5
+    error_message = "The EKS cluster version must be in the format X.Y (e.g., 1.27) and cannot exceed 5 characters."
+  }
+  
+}
+
 variable "cluster_name" {
   description = "EKS Cluster Name"
   type        = string

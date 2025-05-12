@@ -2,6 +2,7 @@
 resource "aws_eks_cluster" "this" {
   name     = var.cluster_name
   role_arn = var.cluster_role_arn
+  version  = var.cluster_version
   tags     = var.default_tags
 
   vpc_config {
