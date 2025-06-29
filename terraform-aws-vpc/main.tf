@@ -139,3 +139,61 @@ resource "aws_route_table_association" "public" {
 
     # Creating list of availability zones by range of desired availability zones count                                                            
   # az_list = [for x in range(var.az_desired_count) : element(data.aws_availability_zones.this.names, x) if var.az_desired_count <= length(data.aws_availability_zones.this.names)]
+
+
+/*
+
+The i in for loop is used as the third argument to the cidrsubnet function, which is required. This argument specifies which subnet to generate within the 
+parent CIDR block.
+The for loop (for i in range(local.subnets_total_count)) generates a sequence of numbers (0, 1, 2, ...).
+For each i, cidrsubnet creates a unique subnet by incrementing the network address.
+This way, you get a list of non-overlapping subnet CIDRs inside your VPC.
+Great question!  
+The `i` at the end of the for loop in this line:
+
+```hcl
+subnet_cidrs = [for i in range(local.subnets_total_count) : cidrsubnet(var.vpc_cidr, var.subnet_prefix - local.vpc_prefix_length, i)]
+```
+
+is used as the **subnet number** for the `cidrsubnet` function.
+
+### Why do we use `i`?
+
+- The `for i in range(local.subnets_total_count)` part loops from `0` up to the number of subnets you want.
+- For each `i`, `cidrsubnet` generates a **unique subnet** by incrementing the network address.
+- The `i` is the index that tells `cidrsubnet` which subnet to generate within the VPC block.
+
+### What does this produce?
+
+It creates a **list of subnet CIDRs**.  
+For example, if you want 4 subnets in a `10.0.0.0/16` VPC with `/24` subnets, you get:
+
+- `cidrsubnet("10.0.0.0/16", 8, 0)` → `10.0.0.0/24`
+- `cidrsubnet("10.0.0.0/16", 8, 1)` → `10.0.1.0/24`
+- `cidrsubnet("10.0.0.0/16", 8, 2)` → `10.0.2.0/24`
+- `cidrsubnet("10.0.0.0/16", 8, 3)` → `10.0.3.0/24`
+
+So, the `i` ensures each subnet is unique and sequential within the VPC.
+
+---
+
+**Summary:**  
+The `i` is needed to generate a different CIDR block for each subnet, resulting in a list of non-overlapping subnets inside your VPC.
+Summary:
+The i is both the loop index and the required subnet number for cidrsubnet, ensuring each subnet CIDR is unique.
+
+
+If you use cidrsubnet without a for loop, you must set the third argument (i) manually. It will generate just one subnet CIDR, based on the index you provide.
+
+For example:
+
+This will produce:
+
+If you set i = 0, you get 10.0.0.0/24
+If you set i = 1, you get 10.0.1.0/24
+If you set i = 6, you get 10.0.6.0/24
+Summary:
+
+Without a loop, cidrsubnet creates only one subnet.
+The third argument (i) selects which subnet to generate within the parent CIDR
+*/

@@ -7,20 +7,20 @@ variable "cluster_version" {
     condition     = can(regex("^[0-9]{1,2}.[0-9]{1,2}$", var.cluster_version)) && length(var.cluster_version) <= 5
     error_message = "The EKS cluster version must be in the format X.Y (e.g., 1.27) and cannot exceed 5 characters."
   }
-  
+
 }
 
 variable "cluster_name" {
   description = "EKS Cluster Name"
   type        = string
-  default = "main"
+  default     = "main"
 
   validation {
     condition     = can(regex("^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?$", var.cluster_name)) && length(var.cluster_name) <= 100
     error_message = "The EKS cluster name must be 1-100 characters long, contain only letters, numbers, and hyphens, and cannot start or end with a hyphen."
   }
 
-/*
+  /*
   AWS EKS Cluster Name Rules
 
 ✅ Allowed Characters:
@@ -59,19 +59,25 @@ variable "subnet_ids" {
   default     = [""]
 }
 
- variable "default_tags" {
+variable "security_group_ids" {
+  description = "Security Group ID's to attach to the EKS Cluster"
+  type        = list(string)
+  default     = [""]
+}
+
+variable "default_tags" {
   description = "Default Tags to apply to all resources"
   type        = map(string)
   default = {
     Owner       = ""
     Environment = ""
     Project     = ""
- }
+  }
 
-   validation {
+  validation {
     condition = alltrue([
-      for v in values(var.default_tags) : 
-        can(regex("^[a-z0-9-]*$", v)) && length(v) <= 100
+      for v in values(var.default_tags) :
+      can(regex("^[a-z0-9-]*$", v)) && length(v) <= 100
     ]) && (contains([""], var.default_tags["Environment"]) || contains(["dev", "stage", "prod", "test", "qa"], var.default_tags["Environment"]))
     error_message = <<EOT
       - Tag values must be 1-100 characters long, contain only lowercase letters, numbers, and hyphens (-), and cannot contain spaces or underscores (_).
