@@ -31,7 +31,7 @@ variable "gitlab_oidc_thumbprint_list" {
 variable "gitlab_group" {
   description = "Gitlab account group which selected branch(es) from seletced project will assume the role"
   type        = string
-  default     = "demodynamics"
+  default     = "*"
   validation {
     condition     = length(var.gitlab_group) > 0
     error_message = "Please provide a valid Gitlab group."
