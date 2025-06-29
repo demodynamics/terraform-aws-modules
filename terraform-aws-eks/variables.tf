@@ -65,6 +65,44 @@ variable "security_group_ids" {
   default     = [""]
 }
 
+variable "endpoint_public_access" {
+  description = "Enable public access to the EKS API server endpoint"
+  type        = bool
+  default     = false
+}
+
+variable "endpoint_private_access" {
+  description = "Enable private access to the EKS API server endpoint"
+  type        = bool
+  default     = true
+}
+
+variable "public_access_cidrs" {
+  description = "CIDR blocks to allow public access to the EKS API server endpoint"
+  type        = list(string)
+  default     = [] # Default to empty list, meaning no public access. or can be set to specific CIDR blocks`YOUR_OFFICE_IP/32
+
+  /*
+If you want to omit public_access_cidrs (i.e., not set it at all):
+In your root module, do not set it, and in your variable definition, do not use [""] as the default.
+Instead, use [] (an empty list) as the default:
+This way, if you don’t set it, Terraform will pass an empty list, which means the attribute is not set and AWS will use its default (usually 0.0.0.0/0).
+*/
+
+
+  validation {
+    condition = alltrue([
+      for cidr in var.public_access_cidrs :
+      can(regex("^([0-9]{1,3}\\.){3}[0-9]{1,3}/[0-9]{1,2}$", cidr))
+    ])
+    error_message = "Each CIDR block must be in the format x.x.x.x/x (e.g., 192.168.1.0/24)."
+  }
+
+}
+
+
+
+
 variable "default_tags" {
   description = "Default Tags to apply to all resources"
   type        = map(string)

@@ -7,10 +7,10 @@ resource "aws_eks_cluster" "this" {
 
   vpc_config {
     subnet_ids              = var.subnet_ids
-    security_group_ids      = var.security_group_ids # Attach your security groups
-    endpoint_public_access  = false                  # The API server is not accessible from the public internet
-    endpoint_private_access = true                   # The EKS API server endpoint is accessible from within your VPC (private IPs).
-    # public_access_cidrs     = ["YOUR_OFFICE_IP/32"]  # Restrict public access if enabled (optional)
+    security_group_ids      = var.security_group_ids      # Attach your security groups
+    endpoint_public_access  = var.endpoint_public_access  # The API server is not accessible from the public internet
+    endpoint_private_access = var.endpoint_private_access # The EKS API server endpoint is accessible from within your VPC (private IPs).
+    public_access_cidrs     = var.public_access_cidrs     # Restrict public access if enabled (optional)
 
   }
   # Uncomment to logging for the EKS cluster control plane
