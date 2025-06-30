@@ -101,6 +101,13 @@ This way, if you don’t set it, Terraform will pass an empty list, which means 
 }
 
 
+variable "prevent_destroy" {
+  description = "Prevent EKS cluster from being destroyed"
+  type        = bool
+  default     = false
+
+}
+
 # cluster_policy_log_types block variables
 # This block is used to configure EKS cluster control plane logging.
 # It is optional and can be enabled or disabled based on the user's requirements.

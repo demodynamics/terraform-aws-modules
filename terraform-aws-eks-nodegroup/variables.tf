@@ -57,19 +57,7 @@ variable "node_instance_type" {
   default     = ["t2.micro"]
 }
 
-variable "create_before_destroy" {
-  description = "Create EKS Node Group before destroying the old one"
-  type        = bool
-  default     = false
 
-}
-
-variable "prevent_destroy" {
-  description = "Prevent EKS Node Group from being destroyed"
-  type        = bool
-  default     = false
-
-}
 
 variable "default_tags" {
   description = "Default Tags to apply to all resources"
@@ -176,8 +164,16 @@ variable "launch_template_version" {
 }
 
 
-# variable "lifecycle_enabled" {
-#   description = "Whether to enable lifecycle management for the node group. Set to true to use lifecycle management features."
-#   type        = bool
-#   default     = false
-# }
+variable "create_before_destroy" {
+  description = "Create EKS Node Group before destroying the old one"
+  type        = bool
+  default     = false
+
+}
+
+variable "prevent_destroy" {
+  description = "Prevent EKS Node Group from being destroyed"
+  type        = bool
+  default     = false
+
+}

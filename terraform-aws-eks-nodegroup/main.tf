@@ -115,23 +115,18 @@ This is the recommended and production-grade way to attach custom security group
 Terraform and AWS best practices.
   */
 
-  # dynamic "lifecycle" {
-  #   for_each = var.lifecycle_enabled && (var.create_before_destroy || var.prevent_destroy) ? [1] : []
-
-  #   content {
-  #     create_before_destroy = var.create_before_destroy
-  #     prevent_destroy       = var.prevent_destroy
-  #   }
-
-  # }
+  lifecycle {
+    create_before_destroy = var.create_before_destroy
+    prevent_destroy       = var.prevent_destroy
+  }
+}
 
 
-  /*
+/*
 It’s a good practice to use create_before_destroy for EKS node groups to ensure zero-downtime updates when possible.
 Keep in mind: AWS may have limits on the number of node groups per cluster, so this may not always be possible if 
 you’re at the limit.
   */
-}
 
 
 /*
