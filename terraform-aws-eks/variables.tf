@@ -100,6 +100,65 @@ This way, if you don’t set it, Terraform will pass an empty list, which means 
 
 }
 
+variable "kms_key_arn" {
+  description = "ARN of the KMS key for EKS secrets encryption"
+  type        = string
+  default     = ""
+
+}
+
+variable "prevent_destroy" {
+  description = "Prevent the EKS cluster from being destroyed"
+  type        = bool
+  default     = false
+
+}
+
+variable "cluster_policy_log_types" {
+  description = "List of EKS cluster control plane log types to enable"
+  type        = list(string)
+  default = [
+    "api",
+    "audit",
+    "authenticator",
+    "controllerManager",
+    "scheduler"
+  ]
+
+  validation {
+    condition     = alltrue([for log_type in var.cluster_policy_log_types : can(regex("^[a-zA-Z]+$", log_type))])
+    error_message = "All log types must be alphabetic characters only."
+  }
+}
+
+variable "encryption_config_resources" {
+  description = "List of resources to encrypt with KMS in EKS"
+  type        = list(string)
+  default     = ["secrets"]
+
+  validation {
+    condition     = alltrue([for resource in var.encryption_config_resources : can(regex("^[a-zA-Z]+$", resource))])
+    error_message = "All resources must be alphabetic characters only."
+  }
+}
+
+variable "access_config_authentication_mode" {
+  description = "Authentication mode for EKS access configuration"
+  type        = string
+  default     = "API"
+
+  validation {
+    condition     = can(regex("^(API|OIDC)$", var.access_config_authentication_mode))
+    error_message = "Authentication mode must be either 'API' or 'OIDC'."
+  }
+}
+
+variable "access_config_bootstrap_cluster_creator_admin_permissions" {
+  description = "Enable admin permissions for bootstrap cluster creator in EKS access configuration"
+  type        = bool
+  default     = true
+}
+
 
 
 

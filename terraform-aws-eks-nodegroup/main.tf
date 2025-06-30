@@ -14,4 +14,8 @@ resource "aws_eks_node_group" "this" {
     max_size     = var.node_scale_max_size
     min_size     = var.node_scale_min_size
   }
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
