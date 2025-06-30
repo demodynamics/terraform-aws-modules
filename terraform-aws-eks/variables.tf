@@ -68,7 +68,7 @@ variable "security_group_ids" {
 variable "endpoint_public_access" {
   description = "Enable public access to the EKS API server endpoint"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "endpoint_private_access" {
@@ -80,7 +80,7 @@ variable "endpoint_private_access" {
 variable "public_access_cidrs" {
   description = "CIDR blocks to allow public access to the EKS API server endpoint"
   type        = list(string)
-  default     = [] # Default to empty list, meaning no public access. or can be set to specific CIDR blocks`YOUR_OFFICE_IP/32
+  default     = ["0.0.0.0/0"] # All IPs can access the public endpoint. Can be set to an empty list [], meaning no public access. or can be set to specific CIDR blocks`YOUR_OFFICE_IP/32
 
   /*
 If you want to omit public_access_cidrs (i.e., not set it at all):
@@ -100,15 +100,46 @@ This way, if you don’t set it, Terraform will pass an empty list, which means 
 
 }
 
-variable "kms_key_arn" {
-  description = "ARN of the KMS key for EKS secrets encryption"
-  type        = string
-  default     = ""
+
+#lifecycle block variables.
+# This block is used to manage the lifecycle of the EKS cluster.
+# It is optional and can be enabled or disabled based on the user's requirements.
+# If enabled, it allows for additional configuration of lifecycle management options such as create_before_destroy and prevent_destroy.
+# If not enabled, EKS will not create the cluster before destroying the old one
+# and will not prevent the cluster from being destroyed.
+variable "lifecycle_enabled" {
+  description = "Enable lifecycle management for EKS cluster"
+  type        = bool
+  default     = false
 
 }
 
 variable "prevent_destroy" {
-  description = "Prevent the EKS cluster from being destroyed"
+  description = "Prevent EKS cluster from being destroyed"
+  type        = bool
+  default     = false
+
+}
+
+# cluster_policy_log_types block variables
+# This block is used to configure EKS cluster control plane logging.
+# It is optional and can be enabled or disabled based on the user's requirements.
+# If enabled, it allows for additional configuration of log types to enable.
+# If not enabled, EKS will not create CloudWatch log groups for the specified log types.
+# Note: The cluster_policy_log_types_eabled variable is a boolean that determines whether the cluster_policy_log_types block is
+# enabled or not. If set to true, the cluster_policy_log_types variable must be provided.
+# If set to false, the cluster_policy_log_types block will not be created,
+# and EKS will not create CloudWatch log groups for the specified log types.
+# The cluster_policy_log_types variable is a list of EKS cluster control plane log types to enable.
+# The default log types include "api", "audit", "authenticator", "controllerManager", and "scheduler".
+# Ensure that the log types are valid and supported by EKS.
+# The log types must be alphabetic characters only.
+# If you do not specify any log types, EKS will not create CloudWatch log groups for the specified log types.
+# The log types are case-sensitive and must match the EKS documentation.
+# The log types can be enabled or disabled based on the user's requirements.
+# The log types can be used to monitor and troubleshoot the EKS cluster control plane.
+variable "cluster_policy_log_types_eabled" {
+  description = "Enable EKS cluster control plane logging"
   type        = bool
   default     = false
 
@@ -131,6 +162,28 @@ variable "cluster_policy_log_types" {
   }
 }
 
+
+# encryption_config block variables
+# This block is used to configure encryption of Kubernetes secrets with KMS in EKS.
+# It is optional and can be enabled or disabled based on the user's requirements.
+# If enabled, it allows for additional configuration of encryption resources and the KMS key ARN.
+# If not enabled, EKS will use the default KMS key for your account.
+# Note: The encryption_config_enabled variable is a boolean that determines whether the encryption_config block is
+# enabled or not. If set to true, the encryption_config_resources and kms_key_arn variables must be provided.
+# If set to false, the encryption_config block will not be created,
+# and EKS will use the default KMS key for your account.
+# If you do not specify a KMS key, EKS will use the default KMS key for your account.
+# The encryption_config_resources variable is a list of resources to encrypt with KMS in EKS.
+# The kms_key_arn variable is the ARN of the KMS key used for encrypting Kubernetes secrets in EKS.
+# Ensure that the KMS key has the necessary permissions for EKS to use it
+# for encryption and decryption.
+variable "encryption_config_enabled" {
+  description = "Enable encryption of Kubernetes secrets with KMS in EKS"
+  type        = bool
+  default     = false
+
+}
+
 variable "encryption_config_resources" {
   description = "List of resources to encrypt with KMS in EKS"
   type        = list(string)
@@ -140,6 +193,25 @@ variable "encryption_config_resources" {
     condition     = alltrue([for resource in var.encryption_config_resources : can(regex("^[a-zA-Z]+$", resource))])
     error_message = "All resources must be alphabetic characters only."
   }
+}
+
+variable "kms_key_arn" {
+  description = "ARN of the KMS key for EKS secrets encryption"
+  type        = string
+  default     = ""
+
+}
+
+# access_config block variables
+# This block is used to configure access to the EKS cluster, including authentication mode and permissions
+# It is optional and can be enabled or disabled based on the user's requirements.
+# If enabled, it allows for additional configuration of access control, such as setting the authentication mode
+# and granting admin permissions to the bootstrap cluster creator.
+variable "access_config_enabled" {
+  description = "Enable EKS access configuration"
+  type        = bool
+  default     = false
+
 }
 
 variable "access_config_authentication_mode" {
