@@ -133,3 +133,51 @@ you’re at the limit.
   */
 }
 
+
+/*
+Note:
+In the context of EKS node groups, an Auto Scaling Group (ASG) is automatically managed by AWS when you 
+create an `aws_eks_node_group` resource.
+
+**Key points:**
+- Each EKS node group creates and manages its own EC2 Auto Scaling Group under the hood.
+- You do not need to define the ASG directly; Terraform and AWS handle it for you.
+- The node group’s scaling_config (desired_size, min_size, max_size) maps directly to the ASG’s scaling settings.
+- The ASG ensures the desired number of EC2 worker nodes are always running, automatically replacing unhealthy
+ nodes and scaling up/down as needed.
+- If you use a launch template, it is attached to the ASG created by the node group.
+
+**Summary:**  
+You don’t manage the ASG directly in EKS node group modules—AWS creates and manages it for you based on your 
+node group configuration. All scaling, health checks, and rolling updates are handled by the EKS-managed ASG.
+
+========
+Auto Scaling Groups (ASGs) exist in several AWS contexts, not just EKS node groups. Here are the main 
+contexts where ASGs are used:
+
+1. **EC2 Auto Scaling (standalone):**
+   - You can create an ASG directly to manage a fleet of EC2 instances for any workload (web servers, app 
+   servers, etc.).
+   - The ASG automatically handles scaling, health checks, and replacement of unhealthy instances.
+
+2. **EKS Node Groups:**
+   - As discussed, each EKS managed node group creates and manages its own ASG under the hood.
+
+3. **Elastic Beanstalk:**
+   - AWS Elastic Beanstalk environments for EC2 use ASGs to manage the number of instances running your 
+   application.
+
+4. **ECS (EC2 launch type):**
+   - When running ECS (Elastic Container Service) with EC2 launch type, you often use an ASG to manage the 
+   EC2 instances that run your containers.
+
+5. **Custom Launch Templates/Configurations:**
+   - You can attach a launch template or launch configuration to an ASG to control how new instances are 
+   launched (AMI, instance type, user data, etc.).
+
+**Summary:**  
+ASGs are a core AWS service for managing fleets of EC2 instances, providing automatic scaling, health
+ management, and integration with many AWS services (EKS, ECS, Beanstalk, etc.).
+
+*/
+
