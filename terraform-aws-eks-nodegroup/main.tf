@@ -115,15 +115,15 @@ This is the recommended and production-grade way to attach custom security group
 Terraform and AWS best practices.
   */
 
-  dynamic "lifecycle" {
-    for_each = var.lifecycle_enabled && (var.create_before_destroy || var.prevent_destroy) ? [1] : []
+  # dynamic "lifecycle" {
+  #   for_each = var.lifecycle_enabled && (var.create_before_destroy || var.prevent_destroy) ? [1] : []
 
-    content {
-      create_before_destroy = var.create_before_destroy
-      prevent_destroy       = var.prevent_destroy
-    }
+  #   content {
+  #     create_before_destroy = var.create_before_destroy
+  #     prevent_destroy       = var.prevent_destroy
+  #   }
 
-  }
+  # }
 
 
   /*

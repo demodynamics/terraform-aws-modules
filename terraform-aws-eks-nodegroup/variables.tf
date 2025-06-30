@@ -176,8 +176,8 @@ variable "launch_template_version" {
 }
 
 
-variable "lifecycle_enabled" {
-  description = "Whether to enable lifecycle management for the node group. Set to true to use lifecycle management features."
-  type        = bool
-  default     = false
-}
+# variable "lifecycle_enabled" {
+#   description = "Whether to enable lifecycle management for the node group. Set to true to use lifecycle management features."
+#   type        = bool
+#   default     = false
+# }
