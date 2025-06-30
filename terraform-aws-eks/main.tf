@@ -125,16 +125,6 @@ This is a standard Terraform pattern for making a nested block optional based on
 
 So, for your dynamic block pattern, using a list (like [var.kms_key_arn]) is correct and standard!
 */
-
-  dynamic "lifecycle" {
-    for_each = var.lifecycle_enabled ? [1] : []
-    content {
-      prevent_destroy = var.prevent_destroy
-    }
-    # This dynamic block is used to conditionally set the prevent_destroy lifecycle argument.
-    # If var.prevent_destroy is true, it will create the block; otherwise, it will not create it.
-
-  }
 }
 
 /*

@@ -101,26 +101,6 @@ This way, if you don’t set it, Terraform will pass an empty list, which means 
 }
 
 
-#lifecycle block variables.
-# This block is used to manage the lifecycle of the EKS cluster.
-# It is optional and can be enabled or disabled based on the user's requirements.
-# If enabled, it allows for additional configuration of lifecycle management options such as create_before_destroy and prevent_destroy.
-# If not enabled, EKS will not create the cluster before destroying the old one
-# and will not prevent the cluster from being destroyed.
-variable "lifecycle_enabled" {
-  description = "Enable lifecycle management for EKS cluster"
-  type        = bool
-  default     = false
-
-}
-
-variable "prevent_destroy" {
-  description = "Prevent EKS cluster from being destroyed"
-  type        = bool
-  default     = false
-
-}
-
 # cluster_policy_log_types block variables
 # This block is used to configure EKS cluster control plane logging.
 # It is optional and can be enabled or disabled based on the user's requirements.
