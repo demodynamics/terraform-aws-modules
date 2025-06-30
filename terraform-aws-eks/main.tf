@@ -127,7 +127,7 @@ So, for your dynamic block pattern, using a list (like [var.kms_key_arn]) is c
 */
 
   lifecycle {
-    prevent_destroy = var.prevent_destroy
+    prevent_destroy = false
   }
 }
 

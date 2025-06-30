@@ -162,18 +162,3 @@ variable "launch_template_version" {
   type        = string
   default     = "$Latest"
 }
-
-
-variable "create_before_destroy" {
-  description = "Create EKS Node Group before destroying the old one"
-  type        = bool
-  default     = false
-
-}
-
-variable "prevent_destroy" {
-  description = "Prevent EKS Node Group from being destroyed"
-  type        = bool
-  default     = false
-
-}

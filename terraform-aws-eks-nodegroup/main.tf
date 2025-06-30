@@ -116,8 +116,8 @@ Terraform and AWS best practices.
   */
 
   lifecycle {
-    create_before_destroy = var.create_before_destroy
-    prevent_destroy       = var.prevent_destroy
+    create_before_destroy = false
+    prevent_destroy       = false
   }
 }
 
