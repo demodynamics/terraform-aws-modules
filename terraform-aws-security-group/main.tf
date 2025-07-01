@@ -1,7 +1,7 @@
 resource "aws_security_group" "this" {
-  name   = "${obj.vpc_name}-${obj.security_groupe_name}"
+  name   = "${var.vpc_name}-${var.security_group_name}"
   vpc_id = var.vpc_id
-  tags   = merge(var.default_tags, { Name = join(" ", compact([var.default_tags["Project"], var.vpc_name, "VPC Security Group"])) })
+  tags   = merge(var.default_tags, { Name = join(" ", compact([var.default_tags["Project"], var.vpc_name, var.security_group_name])) })
 
   lifecycle {
     create_before_destroy = true
