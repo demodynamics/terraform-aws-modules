@@ -10,13 +10,13 @@ variable "cluster_name" {
 
 }
 
-variable "node_group_name" {
+variable "nodegroup_name" {
   description = "EKS Node Group Name"
   type        = string
   default     = "main"
 
   validation {
-    condition     = can(regex("^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?$", var.node_group_name)) && length(var.node_group_name) <= 100
+    condition     = can(regex("^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?$", var.nodegroup_name)) && length(var.nodegroup_name) <= 100
     error_message = "The EKS node group name must be 1-100 characters long, contain only letters, numbers, and hyphens, and cannot start or end with a hyphen."
   }
 
