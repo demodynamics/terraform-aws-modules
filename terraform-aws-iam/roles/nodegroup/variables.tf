@@ -9,7 +9,7 @@ variable "cluster_name" {
   }
 }
 
-variable "node_group_name" {
+variable "nodegroup_name" {
   description = "EKS Node Group Name"
   type        = string
   default     = "main"
