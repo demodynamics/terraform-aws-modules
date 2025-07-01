@@ -198,11 +198,6 @@ variable "access_config_authentication_mode" {
   description = "Authentication mode for EKS access configuration"
   type        = string
   default     = "API"
-
-  validation {
-    condition     = can(regex("^(API|OIDC)$", var.access_config_authentication_mode))
-    error_message = "Authentication mode must be either 'API' or 'OIDC'."
-  }
 }
 
 variable "access_config_bootstrap_cluster_creator_admin_permissions" {
