@@ -1,7 +1,7 @@
 # A node group is one or more EC2 instances that are deployed in an EC2 Auto Scaling group. EKS nodes are standard Amazon EC2 instances.
 resource "aws_eks_node_group" "this" {
   cluster_name    = var.cluster_name
-  node_group_name = "${var.cluster_name}-cluster-nodegroup"
+  node_group_name = "${var.cluster_name}-${varnode_group_name}"
   node_role_arn   = var.node_goup_role_arn
   subnet_ids      = var.subnet_ids # Subnets where the node group will be deployed
   tags            = var.default_tags

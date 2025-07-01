@@ -1,15 +1,15 @@
 resource "aws_security_group" "this" {
-  name        = var.security_group_name
-  vpc_id      = var.vpc_id
-  tags        = merge(var.default_tags, { Name = join(" ", compact([var.default_tags["Project"], var.vpc_name, "VPC Security Group" ]) ) } )
-                    
+  name   = "${obj.vpc_name}-${obj.security_groupe_name}"
+  vpc_id = var.vpc_id
+  tags   = merge(var.default_tags, { Name = join(" ", compact([var.default_tags["Project"], var.vpc_name, "VPC Security Group"])) })
+
   lifecycle {
     create_before_destroy = true
   }
 }
 
 resource "aws_vpc_security_group_ingress_rule" "this" {
-  for_each = {for k, v in var.ingress_rules : k => v}
+  for_each = { for k, v in var.ingress_rules : k => v }
 
   security_group_id = aws_security_group.this.id
 
@@ -20,7 +20,7 @@ resource "aws_vpc_security_group_ingress_rule" "this" {
   description    = each.value.description
   cidr_ipv6      = each.value.cidr_ipv6
   prefix_list_id = each.value.prefix_list_id
-  tags           = each.value.tags 
+  tags           = each.value.tags
 
   lifecycle {
     create_before_destroy = true
@@ -28,8 +28,8 @@ resource "aws_vpc_security_group_ingress_rule" "this" {
 }
 
 resource "aws_vpc_security_group_egress_rule" "this" {
-  for_each = {for k, v in var.egress_rules : k => v}
-  
+  for_each = { for k, v in var.egress_rules : k => v }
+
   security_group_id = aws_security_group.this.id
 
   cidr_ipv4      = each.value.cidr_ipv4
