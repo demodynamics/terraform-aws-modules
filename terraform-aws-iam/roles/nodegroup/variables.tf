@@ -15,7 +15,7 @@ variable "nodegroup_name" {
   default     = "main"
 
   validation {
-    condition     = can(regex("^[a-z0-9-]{1,64}$", var.node_group_name))
+    condition     = can(regex("^[a-z0-9-]{1,64}$", var.nodegroup_name))
     error_message = "node_group_name must be between 1 and 64 characters, and can only contain lowercase letters, numbers, and hyphens."
   }
 
