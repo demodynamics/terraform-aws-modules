@@ -1,9 +1,3 @@
-variable "eks_cluster_dependency" {
-  description = "Dependency on the EKS cluster resource"
-  type        = any
-  default     = null
-}
-
 variable "aws_auth_roles" {
   description = "List of IAM roles to map to Kubernetes RBAC roles"
   type = list(object({
