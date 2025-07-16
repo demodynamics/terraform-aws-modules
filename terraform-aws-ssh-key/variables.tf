@@ -12,7 +12,7 @@ variable "tls_private_key_rsa_bits" {
 
 }
 
-variable "aws_key_pair_name" {
+variable "aws_ssh_key_pair_name" {
   description = "Name of the AWS EC2 key pair to create."
   type        = string
   default     = "ssh-key"
