@@ -56,9 +56,9 @@ access with the corresponding private key.
 
 resource "local_file" "eks_ssh_private_key" {
   content              = tls_private_key.ssh.private_key_pem
-  filename             = try(var.eks_ssh_private_key_filename, "./ec2-ssh-key.pem")
-  file_permission      = try(var.eks_ssh_private_key_file_permission, "0400")
-  directory_permission = try(var.eks_ssh_private_key_directory_permission, "0700")
+  filename             = try(var.ssh_private_key_filename, "./ec2-ssh-key.pem")
+  file_permission      = try(var.ssh_private_key_file_permission, "0400")
+  directory_permission = try(var.ssh_private_key_directory_permission, "0700")
 
   /*
 - The SSH private key will be saved as eks-ssh-key.pem in your working directory with secure permissions.
