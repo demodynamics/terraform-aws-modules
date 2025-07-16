@@ -32,7 +32,7 @@ resource "aws_vpc" "vpc" {
   cidr_block           = var.vpc_cidr
   enable_dns_support   = var.vpc_dns
   enable_dns_hostnames = var.vpc_dns
-  tags                 = merge(var.default_tags, { Name = join("-", compact([var.default_tags["Project"], var.vpc_name, "vpc" ]) ) } )
+  tags                 = merge(var.default_tags, { Name = join("-", compact([var.default_tags["Project"], "vpc" ]) ) } )
 
   lifecycle {
     precondition {
@@ -49,7 +49,7 @@ resource "aws_subnet" "public" {
   cidr_block              = local.public_subnet_cidrs[count.index]
   availability_zone       = element(local.az_list, count.index % length(local.az_list))
   map_public_ip_on_launch = var.map_public_ip_on_launch
-  tags                    = merge(var.default_tags, { Name = join("-", compact([var.default_tags["Project"], var.vpc_name, "vpc public subnet ${count.index}" ]) ) } ) 
+  tags                    = merge(var.default_tags, { Name = join("-", compact([var.default_tags["Project"], "vpc public subnet ${count.index}" ]) ) } ) 
 }
 
 resource "aws_subnet" "private" {
@@ -57,13 +57,13 @@ resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = local.private_subnet_cidrs[count.index]
   availability_zone = element(local.az_list, count.index % length(local.az_list))
-  tags              = merge(var.default_tags, { Name = join("-", compact([var.default_tags["Project"], var.vpc_name, "vpc private subnet ${count.index}" ]) )} )
+  tags              = merge(var.default_tags, { Name = join("-", compact([var.default_tags["Project"], "vpc private subnet ${count.index}" ]) )} )
 }
 
 #----------------IGW--------------------
 resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.vpc.id
-  tags   = merge(var.default_tags, { Name = join("-", compact(["", var.default_tags["Project"], var.vpc_name, "vpc internet gateway" ]) ) } )
+  tags   = merge(var.default_tags, { Name = join("-", compact(["", var.default_tags["Project"], "vpc internet gateway" ]) ) } )
 }
 
 #--------Elastic IP (Static Public IP)-------
@@ -71,7 +71,7 @@ resource "aws_eip" "this" {
   count      = local.natgw_count
   domain     = "vpc"
   depends_on = [ aws_internet_gateway.this ]
-  tags       = merge(var.default_tags, { Name = join("-", compact(["elastic ip ${count.index} for", var.default_tags["Project"], var.vpc_name, "vpc", "nat gateway ${count.index}" ]) ) } )
+  tags       = merge(var.default_tags, { Name = join("-", compact(["elastic ip ${count.index} for", var.default_tags["Project"], "vpc", "nat gateway ${count.index}" ]) ) } )
 }
 
 #----------NAT Gateway------------------------------
@@ -79,14 +79,14 @@ resource "aws_nat_gateway" "this" {
   count         = local.natgw_count
   allocation_id = aws_eip.this[count.index].id
   subnet_id     = aws_subnet.public[count.index].id
-  tags          = merge(var.default_tags, { Name = join("-", compact(["nat gateway ${count.index} of ", var.default_tags["Project"], var.vpc_name, "vpc" ]) ) } )
+  tags          = merge(var.default_tags, { Name = join("-", compact(["nat gateway ${count.index} of ", var.default_tags["Project"], "vpc" ]) ) } )
 }
 
 #-------------Route Tables-----------------
 resource "aws_route_table" "private" {
   count  = local.natgw_count
   vpc_id = aws_vpc.vpc.id
-  tags   = merge(var.default_tags, { Name = join("-", compact(["private route table ${count.index} of", var.default_tags["Project"], var.vpc_name, "vpc" ]) ) } )
+  tags   = merge(var.default_tags, { Name = join("-", compact(["private route table ${count.index} of", var.default_tags["Project"], "vpc" ]) ) } )
 
   route {
      cidr_block     = var.route_cidr
@@ -97,7 +97,7 @@ resource "aws_route_table" "private" {
 resource "aws_route_table" "public" {
   count  = local.public_route_count
   vpc_id = aws_vpc.vpc.id
-  tags   = merge(var.default_tags, { Name = join("-", compact(["public route table ${count.index} of", var.default_tags["Project"], var.vpc_name, "vpc" ]) ) } )
+  tags   = merge(var.default_tags, { Name = join("-", compact(["public route table ${count.index} of", var.default_tags["Project"], "vpc" ]) ) } )
 
   route {
      cidr_block = var.route_cidr
