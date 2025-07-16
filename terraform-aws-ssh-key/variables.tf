@@ -5,7 +5,7 @@ variable "tls_private_key_algorithm" {
 
 }
 
-variable "tls_private_key_rsa_bits" {
+variable "tls_private_key_bits" {
   description = "Number of bits for the key. Default is 4096."
   type        = number
   default     = 4096
