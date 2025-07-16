@@ -30,21 +30,21 @@ variable "write_local_file" {
   default = true
 }
 
-variable "eks_ssh_private_key_filename" {
+variable "ssh_private_key_filename" {
   description = "Filename to save the private key. Default is eks-ssh-key.pem."
   type        = string
   default     = "./ec2-ssh-key.pem"
 
 }
 
-variable "eks_ssh_private_key_file_permission" {
+variable "ssh_private_key_file_permission" {
   description = "File permission for the private key file. Default is 0400."
   type        = string
   default     = "0400"
 
 }
 
-variable "eks_ssh_private_key_directory_permission" {
+variable "ssh_private_key_directory_permission" {
   description = "Directory permission for the private key file. Default is 0700."
   type        = string
   default     = "0700"
