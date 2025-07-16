@@ -1,18 +1,3 @@
-/*Key Point:
-A VPC Name is usually just a tag, so spaces may be fine, but if you're using it as a part of AWS resource names (e.g., in CLI or scripting),
-avoiding spaces is safer.
-But an attrubute like Security Group name can contain spaces because AWS allows it.*/
-
-variable "vpc_name" {
-  type    = string
-  default = "main"
-
-  validation {
-    condition = can(regex("^[a-zA-Z0-9-_]+$", var.vpc_name)) && length(var.vpc_name) <= 255
-    error_message = "The vpc_name must contain only letters, numbers, hyphens (-), or underscores (_) (max 255 characters)."
-  }
-}
-
 variable "vpc_cidr" {
   description = "The CIDR block of the VPC"
   type        = string
