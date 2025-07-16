@@ -9,7 +9,6 @@ variable "tls_private_key_bits" {
   description = "Number of bits for the key. Default is 4096."
   type        = number
   default     = 4096
-
 }
 
 variable "aws_key_pair_name" {
