@@ -12,7 +12,7 @@ If you want the private key written to a file automatically, let me know.*/
 
 resource "tls_private_key" "ssh" {
   algorithm = try(var.tls_private_key_algorithm, "RSA")
-  rsa_bits  = try(var.tls_private_key_rsa_bits, 4096)
+  rsa_bits  = try(var.tls_private_key_bits, 4096)
 
   /*The resource tls_private_key "ssh" creates a new RSA public/private key pair in memory when you run 
   terraform apply.
