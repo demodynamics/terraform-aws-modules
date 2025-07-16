@@ -37,7 +37,7 @@ resource "aws_vpc" "vpc" {
   lifecycle {
     precondition {
       condition     = var.az_desired_count <= length(data.aws_availability_zones.this.names)
-      error_message = "var.az_desired_count count (${var.az_desired_count}) exceeds available AZs count (${length(data.aws_availability_zones.this.names)}) of current (${data.aws_region.current}) region."
+      error_message = "var.az_desired_count count (${var.az_desired_count}) exceeds available AZs count (${length(data.aws_availability_zones.this.names)}) of current (${data.aws_region.current.region}) region."
     }
   }
 }
