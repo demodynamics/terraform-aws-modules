@@ -1,5 +1,5 @@
-output "eks_ssh_private_key_pem" {
-  description = "The private key for SSH access to EKS nodes. Save this securely!"
+output "ssh_private_key_pem" {
+  description = "The private key for SSH access to EC2 Instance or EKS nodes. Save this securely!"
   value       = tls_private_key.ssh.private_key_pem
   sensitive   = true
 }
