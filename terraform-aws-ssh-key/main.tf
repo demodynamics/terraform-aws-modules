@@ -32,7 +32,7 @@ The resource tls_private_key "ssh" does NOT create anything in AWS.
 pair.
 - The tls_private_key resource is just for key generation; it does not interact with AWS directly.
 
-So, only aws_key_pair and aws_eks_node_group create resources in AWS. The tls_private_key resource is for 
+So, only aws_key_pair create resources in AWS. The tls_private_key resource is for 
 local cryptographic key management.
 
 */
