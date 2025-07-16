@@ -1,4 +1,4 @@
-output "ssh_key_name" {
+output "ssh_key_pair_name" {
   description = "The name of the AWS EC2 key pair"
   value       = aws_key_pair.ssh.key_name
 }
