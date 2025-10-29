@@ -50,9 +50,12 @@ resource "local_file" "eks_ssh_private_key" {
   # --- CORRECTED CONTENT REFERENCE ---
   content = one(concat(
     # References the private key from the RSA resource if it was created
+    # RSA: PEM is fine, but OpenSSH format also works
     tls_private_key.rsa_ssh[*].private_key_pem,
 
     # References the private key from the ED25519 resource if it was created
+    # Use the OpenSSH format for Ed25519!
+    #Use the OpenSSH format for best compatibility!
     tls_private_key.ed25519_ssh[*].private_key_openssh,
 
     # References the private key from the ECDSA resource if it was created
