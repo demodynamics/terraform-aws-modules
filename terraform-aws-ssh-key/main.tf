@@ -53,10 +53,10 @@ resource "local_file" "eks_ssh_private_key" {
     tls_private_key.rsa_ssh[*].private_key_pem,
 
     # References the private key from the ED25519 resource if it was created
-    tls_private_key.ed25519_ssh[*].private_key_pem,
+    tls_private_key.ed25519_ssh[*].private_key_openssh,
 
     # References the private key from the ECDSA resource if it was created
-    tls_private_key.ecdsa_ssh[*].private_key_pem,
+    tls_private_key.ecdsa_ssh[*].private_key_openssh,
   ))
   # -----------------------------------
 
