@@ -66,7 +66,7 @@ resource "local_file" "eks_ssh_private_key" {
   directory_permission = try(var.ssh_private_key_directory_permission, "0700")
 
   /*
-- The SSH private key will be saved as eks-ssh-key.pem in your working directory with secure permissions.
+- The SSH private key will be saved as ec2-ssh-key.pem in your working directory with secure permissions.
 - You can use this file directly to SSH into your EKS nodes (if remote_access block in node group module is 
 enabled and security group allows it).
 
