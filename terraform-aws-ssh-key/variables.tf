@@ -1,7 +1,12 @@
 variable "tls_private_key_algorithm" {
   description = "Algorithm for the TLS private key. Default is RSA."
   type        = string
-  default     = "RSA"
+  default     = ""
+
+  validation {
+    condition     = contains(["RSA", "ECDSA", "ED25519"], var.tls_private_key_algorithm)
+    error_message = "value must be one of 'RSA', 'ECDSA', or 'ED25519'."
+  }
 
 }
 
@@ -9,6 +14,17 @@ variable "tls_private_key_bits" {
   description = "Number of bits for the key. Default is 4096."
   type        = number
   default     = 4096
+}
+
+variable "ecdsa_curve" {
+  description = "The ECDSA curve to use when the algorithm is ECDSA. Options are P256, P384, or P521."
+  type        = string
+  default     = "P256"
+  validation {
+    condition     = contains(["P256", "P384", "P521"], var.ecdsa_curve)
+    error_message = "value must be one of 'P256', 'P384', or 'P521'."
+  }
+
 }
 
 variable "aws_key_pair_name" {
