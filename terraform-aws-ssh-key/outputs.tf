@@ -7,8 +7,8 @@ output "ssh_private_key_pem" {
   description = "The private key in PEM format for SSH access to EC2 Instances. Save this securely!"
   value = one(concat(
     tls_private_key.rsa_ssh[*].private_key_pem,
-    tls_private_key.ed25519_ssh[*].private_key_pem,
-    tls_private_key.ecdsa_ssh[*].private_key_pem,
+    tls_private_key.ed25519_ssh[*].private_key_openssh,
+    tls_private_key.ecdsa_ssh[*].private_key_openssh,
   ))
   sensitive = true
 }
