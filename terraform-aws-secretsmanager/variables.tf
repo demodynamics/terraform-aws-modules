@@ -4,7 +4,7 @@ variable "secret_name" {
   default     = ""
 
   validation {
-    condition     = length(var.secret_name) > 0 && var.secret_name <= 512
+    condition     = length(var.secret_name) > 0 && length(var.secret_name) <= 512
     error_message = "The secret_name variable must not be empty."
   }
 
