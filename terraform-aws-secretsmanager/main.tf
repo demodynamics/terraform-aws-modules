@@ -2,9 +2,9 @@
 # 1. Define the secret container in AWS Secrets Manager
 resource "aws_secretsmanager_secret" "secret" {
   # You can customize the name of your secret
-  name                    = var.secret_name
-  description             = " Creating Secrets Manager secret"
-  recovery_window_in_days = 7 # Recommended practice
+  name        = var.secret_name
+  description = " Creating Secrets Manager secret"
+  # recovery_window_in_days = 7 # Recommended practice
 
   tags = merge(var.tags, {
     Name = "${var.secret_name}"
