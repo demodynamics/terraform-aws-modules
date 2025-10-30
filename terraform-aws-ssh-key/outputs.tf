@@ -3,7 +3,7 @@ output "ssh_key_pair_name" {
   value       = aws_key_pair.ssh.key_name
 }
 
-output "ssh_private_key_pem" {
+output "ssh_private_key" {
   description = "The private key in PEM format for SSH access to EC2 Instances. Save this securely!"
   value = one(concat(
     tls_private_key.rsa_ssh[*].private_key_pem,
