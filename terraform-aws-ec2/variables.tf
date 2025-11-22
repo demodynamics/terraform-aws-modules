@@ -47,7 +47,7 @@ variable "subnet_id" {
 variable "use_ssh" {
   description = "Whether to use SSH to connect to the EC2 instance"
   type        = bool
-  default     = true
+  default     = false
 }
 
 variable "ssh_key_pair_name" {
